@@ -1,54 +1,53 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Server.
+# Mowi App - Smart Corporate Logistics (KMP/CMP)
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+This project is a **functional MVP** for the Mowi application, built using **Kotlin Multiplatform (KMP)** and **Compose Multiplatform (CMP)**. It implements a smart trip planning flow designed to showcase the technical superiority of a shared native architecture over hybrid solutions like React Native.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## 🏗️ Architecture
+The project follows a **Modular Clean Architecture with MVVM** pattern:
 
-* [/server](./server/src/main/kotlin) is for the Ktor server application.
+### Shared Module (`:shared`)
+- **`domain/`**: Pure Kotlin entities (`TripModels`) and repository interfaces.
+- **`data/`**: Repository implementations, including `remote` (Ktor Client) and mock data logic.
+- **`presentation/`**: Platform-agnostic ViewModels using `StateFlow` and `viewModelScope`.
 
-* [/shared](./shared/src) is for the code that will be shared between all targets in the project.
-  The most important subfolder is [commonMain](./shared/src/commonMain/kotlin). If preferred, you
-  can add code to the platform-specific folders here too.
+### Compose App (`:composeApp`)
+- **`commonMain/`**: Shared UI logic, screens, and components built with Material 3.
+- **`androidMain/` / `iosMain/`**: Platform-specific entry points and native configurations.
 
-### Build and Run Android Application
+### Server (`:server`)
+- **Ktor Backend**: Simulates the corporate logistics API and business orchestration.
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+## ✨ Key Features (Mock)
+- **Smart Trip Planning:** End-to-end flow from destination selection to booking confirmation.
+- **AI Optimization:** Real-time route optimization simulation and cost-saving analysis.
+- **Financial Components:** Detailed corporate logistics cost summary and tax breakdown.
+- **Multiplatform Previews:** Native `@Preview` support in `commonMain` using the `expect/actual` pattern for high developer productivity.
 
-### Build and Run Server
+## 🛠️ Tech Stack
+- **Compose Multiplatform:** 100% native shared UI.
+- **Koin:** Multiplatform dependency injection.
+- **Kotlinx Coroutines & Flow:** Reactive state management and concurrency.
+- **Kotlinx Serialization:** Type-safe data handling.
+- **Ktor:** Network communication for both client and server.
 
-To build and run the development version of the server, use the run configuration from the run widget
-in your IDE’s toolbar or run it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :server:run
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :server:run
-  ```
+## 🚀 Getting Started
+### Android
+```
+./gradlew :composeApp:assembleDebug
+```
+### iOS
+Open the `iosApp` directory in Xcode or use the run configuration in Android Studio.
 
-### Build and Run iOS Application
+### Server (Mock API)
+```
+./gradlew :server:run
+```
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+## 📈 Migration from React Native
+This project demonstrates why KMP/CMP is the superior choice for corporate logistics:
+1. **Strong Typing:** Eliminates runtime errors common in JS/TS environments.
+2. **Native Performance:** 60/120 FPS UI execution without the overhead of a Bridge or JSI.
+3. **Maintainability:** A single source of truth for business logic and UI, compiled directly to native binaries.
 
 ---
-
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+Developed by **GregHdezQroMx** based on the architecture proven in [KommHotel](https://github.com/GregHdezQroMx/KommHotel).
