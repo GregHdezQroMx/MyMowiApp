@@ -1,6 +1,5 @@
 package com.jght.business.mobility.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,22 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jght.business.mobility.domain.TripDestination
-import com.jght.business.mobility.domain.TripCostSummary
-import com.jght.business.mobility.domain.TripOptimizationInfo
-import com.jght.business.mobility.presentation.TripUiState
-import com.jght.business.mobility.presentation.TripViewModel
+import com.jght.business.mobility.domain.features.mobility.model.TripDestination
+import com.jght.business.mobility.domain.features.mobility.model.TripCostSummary
+import com.jght.business.mobility.domain.features.mobility.model.TripOptimizationInfo
+import com.jght.business.mobility.presentation.features.mobility.viewmodel.TripUiState
+import com.jght.business.mobility.presentation.features.mobility.viewmodel.TripViewModel
 
-/**
- * PANTALLA DE PROGRAMACIÓN DE VIAJES (Compose Multiplatform)
- * 
- * COMPARACIÓN CON REACT NATIVE (JSX/TSX):
- * 1. RENDIMIENTO: En RN, el renderizado depende de un puente (Bridge) o JSI. 
- *    En CMP, el código se compila a binario nativo (iOS) o Bytecode optimizado (Android).
- * 2. ESTADO: En RN usarías 'useEffect' para cargar datos, lo cual puede causar 
- *    bucles infinitos si no se maneja bien. Aquí, el ViewModel con StateFlow 
- *    mantiene el estado fuera del ciclo de vida de la UI de forma segura.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripBookingScreen(viewModel: TripViewModel) {
