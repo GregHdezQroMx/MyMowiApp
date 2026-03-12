@@ -1,6 +1,8 @@
-package com.jght.business.mobility.data.features.mobility.repository
+package com.jght.business.mobility.features.mobility.data.repository
 
-import com.jght.business.mobility.domain.features.mobility.model.*
+import com.jght.business.mobility.features.mobility.domain.TripCostSummary
+import com.jght.business.mobility.features.mobility.domain.TripDestination
+import com.jght.business.mobility.features.mobility.domain.TripOptimizationInfo
 import kotlinx.coroutines.delay
 
 class TripRepository {

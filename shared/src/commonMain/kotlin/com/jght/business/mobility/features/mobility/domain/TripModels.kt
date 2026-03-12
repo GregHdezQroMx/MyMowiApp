@@ -1,4 +1,4 @@
-package com.jght.business.mobility.domain.features.mobility.model
+package com.jght.business.mobility.features.mobility.domain
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable

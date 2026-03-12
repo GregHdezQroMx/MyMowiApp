@@ -1,4 +1,4 @@
-package com.jght.business.mobility.ui
+package com.jght.business.mobility.features.mobility.presentation.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
@@ -32,7 +32,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.DirectionsBus
+import androidx.compose.material.icons.filled.DirectionsCar
+import androidx.compose.material.icons.filled.Eco
+import androidx.compose.material.icons.filled.LocalTaxi
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -58,16 +63,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jght.business.mobility.domain.features.mobility.model.TripCostSummary
-import com.jght.business.mobility.domain.features.mobility.model.TripDestination
-import com.jght.business.mobility.domain.features.mobility.model.TripOptimizationInfo
-import com.jght.business.mobility.domain.features.mobility.model.VehicleType
-import com.jght.business.mobility.presentation.features.mobility.viewmodel.LatLng
-import com.jght.business.mobility.presentation.features.mobility.viewmodel.TripUiState
-import com.jght.business.mobility.presentation.features.mobility.viewmodel.TripViewModel
+import com.jght.business.mobility.features.mobility.domain.TripCostSummary
+import com.jght.business.mobility.features.mobility.domain.TripDestination
+import com.jght.business.mobility.features.mobility.domain.TripOptimizationInfo
+import com.jght.business.mobility.features.mobility.domain.VehicleType
+import com.jght.business.mobility.features.mobility.presentation.viewmodel.LatLng
+import com.jght.business.mobility.features.mobility.presentation.viewmodel.TripUiState
+import com.jght.business.mobility.features.mobility.presentation.viewmodel.TripViewModel
 import mymowiapp.composeapp.generated.resources.Res
 import mymowiapp.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
@@ -380,10 +386,15 @@ fun VehicleTypeCard(v: VehicleType, isSel: Boolean, onClick: () -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val icon = when(v.id) {
-                "corp" -> "🚕"; "van" -> "🚐"; "hour" -> "🕒"; "exec" -> "🚗"; "green" -> "🍃"; else -> "🚙"
+            val icon: ImageVector = when(v.id) {
+                "corp" -> Icons.Default.LocalTaxi
+                "van" -> Icons.Default.DirectionsBus
+                "hour" -> Icons.Default.Schedule
+                "exec" -> Icons.Default.DirectionsCar
+                "green" -> Icons.Default.Eco
+                else -> Icons.Default.DirectionsCar
             }
-            Text(icon, fontSize = 28.sp)
+            Icon(imageVector = icon, contentDescription = null, modifier = Modifier.size(32.dp), tint = if (isSel) Color(0xFF3F51B5) else Color.Gray)
             Spacer(modifier = Modifier.height(6.dp))
             Text(v.name, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, color = Color.Black)
         }

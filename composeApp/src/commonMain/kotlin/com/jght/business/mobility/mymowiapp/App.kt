@@ -46,13 +46,13 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.jght.business.mobility.data.features.mobility.repository.TripRepository
-import com.jght.business.mobility.domain.features.mobility.model.TripRoute
-import com.jght.business.mobility.presentation.features.mobility.viewmodel.TripUiState
-import com.jght.business.mobility.presentation.features.mobility.viewmodel.TripViewModel
-import com.jght.business.mobility.ui.ActiveTripScreen
-import com.jght.business.mobility.ui.HomeScreen
-import com.jght.business.mobility.ui.TripBookingScreen
+import com.jght.business.mobility.features.mobility.data.repository.TripRepository
+import com.jght.business.mobility.features.mobility.domain.TripRoute
+import com.jght.business.mobility.features.mobility.presentation.ui.ActiveTripScreen
+import com.jght.business.mobility.features.mobility.presentation.ui.HomeScreen
+import com.jght.business.mobility.features.mobility.presentation.ui.TripBookingScreen
+import com.jght.business.mobility.features.mobility.presentation.viewmodel.TripUiState
+import com.jght.business.mobility.features.mobility.presentation.viewmodel.TripViewModel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -98,9 +98,10 @@ fun App() {
                     drawerShape = RoundedCornerShape(0.dp)
                 ) {
                     DrawerContent(
-                        userName = userName,
-                        onClose = { scope.launch { drawerState.close() } }
-                    )
+                        userName = userName
+                    ) {
+                        scope.launch { drawerState.close() }
+                    }
                 }
             }
         ) {
@@ -181,10 +182,18 @@ fun DrawerContent(userName: String, onClose: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider(color = Color(0xFFF5F5F5))
 
-        DrawerItem(Icons.AutoMirrored.Filled.List, stringResource(Res.string.trip_history), { onClose() })
-        DrawerItem(Icons.Default.DateRange, stringResource(Res.string.trip_agenda), { onClose() })
-        DrawerItem(Icons.Default.Info, stringResource(Res.string.about_mowi), { onClose() })
-        DrawerItem(Icons.Default.Build, stringResource(Res.string.support), { onClose() })
+        DrawerItem(Icons.AutoMirrored.Filled.List, stringResource(Res.string.trip_history)) {
+            onClose()
+        }
+        DrawerItem(Icons.Default.DateRange, stringResource(Res.string.trip_agenda)) {
+            onClose()
+        }
+        DrawerItem(Icons.Default.Info, stringResource(Res.string.about_mowi)) {
+            onClose()
+        }
+        DrawerItem(Icons.Default.Build, stringResource(Res.string.support)) {
+            onClose()
+        }
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -207,8 +216,18 @@ fun DrawerContent(userName: String, onClose: () -> Unit) {
                     tint = Color.Black.copy(alpha = 0.8f)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                Text(stringResource(Res.string.contact_us), fontWeight = FontWeight.ExtraBold, fontSize = 12.sp, color = Color.Gray)
-                Text("+598 99 017 660", color = Color(0xFF3F51B5), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(
+                    stringResource(Res.string.contact_us),
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+                Text(
+                    "+598 99 017 660",
+                    color = Color(0xFF3F51B5),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
             }
         }
     }

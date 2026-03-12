@@ -1,9 +1,13 @@
-package com.jght.business.mobility.presentation.features.mobility.viewmodel
+package com.jght.business.mobility.features.mobility.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jght.business.mobility.data.features.mobility.repository.TripRepository
-import com.jght.business.mobility.domain.features.mobility.model.*
+import com.jght.business.mobility.features.mobility.data.repository.TripRepository
+import com.jght.business.mobility.features.mobility.domain.TripCostSummary
+import com.jght.business.mobility.features.mobility.domain.TripDestination
+import com.jght.business.mobility.features.mobility.domain.TripOptimizationInfo
+import com.jght.business.mobility.features.mobility.domain.UserProfile
+import com.jght.business.mobility.features.mobility.domain.VehicleType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
