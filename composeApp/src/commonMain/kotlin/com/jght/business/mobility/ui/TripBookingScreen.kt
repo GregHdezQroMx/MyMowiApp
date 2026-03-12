@@ -1,5 +1,6 @@
 package com.jght.business.mobility.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -23,10 +24,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -255,6 +256,7 @@ fun ActiveTripScreen(viewModel: TripViewModel, destinationName: String, onTripFi
     val progress by viewModel.tripProgress.collectAsState()
     val location by viewModel.vehicleLocation.collectAsState()
     val isArriving by viewModel.isDriverArriving.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         MockMapView(modifier = Modifier.fillMaxSize(), vehicleLocation = location, isDriverArriving = isArriving)
@@ -269,37 +271,52 @@ fun ActiveTripScreen(viewModel: TripViewModel, destinationName: String, onTripFi
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = if (isArriving) "Conductor en camino..." else "Viaje a $destinationName",
+                    text = if (isArriving) "Conductor en camino..." else if (progress >= 1f) "¡Destino alcanzado!" else "Viaje a $destinationName",
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 20.sp
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                LinearProgressIndicator(
-                    progress = { progress },
-                    modifier = Modifier.fillMaxWidth().height(10.dp).clip(CircleShape),
-                    color = if (progress >= 1f) Color(0xFF2E7D32) else Color(0xFF3F51B5),
-                    trackColor = Color(0xFFF5F5F5)
-                )
-                Spacer(modifier = Modifier.height(12.dp))
+                
+                if (progress < 1f || isArriving) {
+                    LinearProgressIndicator(
+                        progress = { progress },
+                        modifier = Modifier.fillMaxWidth().height(10.dp).clip(CircleShape),
+                        color = Color(0xFF3F51B5),
+                        trackColor = Color(0xFFF5F5F5)
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+
                 Text(
                     text = when {
                         isArriving -> "Tu conductor asignado llegará en 3 min"
                         progress < 1f -> "Tiempo estimado de llegada: ${( (1f - progress) * 10).toInt()} min"
-                        else -> "¡Has llegado a tu destino!"
+                        else -> "Resumen de tu viaje corporativo"
                     },
                     fontSize = 14.sp,
                     color = if (progress >= 1f) Color(0xFF2E7D32) else Color.Gray,
                     fontWeight = if (progress >= 1f) FontWeight.Bold else FontWeight.Normal
                 )
-                if (progress >= 1f) {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Button(
-                        onClick = onTripFinished,
-                        modifier = Modifier.fillMaxWidth().height(50.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Text("Finalizar y Ver Resumen", color = Color.White)
+
+                // Resumen final visible al terminar el viaje
+                AnimatedVisibility(visible = progress >= 1f) {
+                    Column {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        if (uiState is TripUiState.Success) {
+                            val state = uiState as TripUiState.Success
+                            state.costSummary?.let { CostSummaryCard(it) }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            state.optimization?.let { OptimizationCard(it) }
+                        }
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Button(
+                            onClick = onTripFinished,
+                            modifier = Modifier.fillMaxWidth().height(50.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Text("Finalizar y Aceptar", color = Color.White)
+                        }
                     }
                 }
             }
