@@ -24,7 +24,7 @@
     <string name="corporate_insurance">Corporate Insurance</string>
     <string name="total_final">Final Total</string>
     <string name="ai_optimization_title">MOWI AI Optimization</string>
-    <string name="projected_savings">Projected Savings: %1$d%%</string>
+    <string name="projected_savings">Projected Savings: %1$d%</string>
 
     <!-- Drawer Menu -->
     <string name="view_profile">View my profile</string>
@@ -33,4 +33,22 @@
     <string name="about_mowi">About Mowi</string>
     <string name="support">Support</string>
     <string name="contact_us">GET IN TOUCH</string>
+
+    <!-- History -->
+    <string name="cancelled">Cancelled</string>
+    <string name="collected">Collected</string>
+    <string name="origin_label">Origin:</string>
+    <string name="destination_label">Destination:</string>
+    <string name="see_more">See more</string>
+
+    <!-- About -->
+    <string name="about_us_title">About us</string>
+    <string name="about_desc">At Mowi, we are committed to excellence in corporate transport. We make it easy for companies to manage the transfer of collaborators and clients with an integral platform that covers every aspect of the trip. Our service not only saves time and resources, but also elevates the experience of corporate mobility to new standards of elegance and efficiency.</string>
+    <string name="write_query">Write your query</string>
+    <string name="mowi_offer">Mowi offers adaptive business travel, prioritizing unique experiences with personalized services for efficient and hassle-free transfers in all modes.</string>
+
+    <!-- Profile -->
+    <string name="profile_title">User Profile</string>
+    <string name="profile_email">Email:</string>
+    <string name="profile_role">Role:</string>
 </resources>

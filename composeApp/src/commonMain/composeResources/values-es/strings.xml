@@ -33,4 +33,22 @@
     <string name="about_mowi">Sobre Mowi</string>
     <string name="support">Soporte</string>
     <string name="contact_us">ENTRE EN CONTACTO</string>
+
+    <!-- History -->
+    <string name="cancelled">Cancelado</string>
+    <string name="collected">Cobrado</string>
+    <string name="origin_label">Origen:</string>
+    <string name="destination_label">Destino:</string>
+    <string name="see_more">Ver más</string>
+
+    <!-- About -->
+    <string name="about_us_title">Acerca de nosotros</string>
+    <string name="about_desc">En Mowi, estamos comprometidos con la excelencia en el transporte corporativo. Facilitamos que las empresas gestionen el traslado de colaboradores y clientes con una plataforma integral que cubre cada aspecto del viaje. Nuestro servicio no solo ahorra tiempo y recursos, sino que también eleva la experiencia de movilidad corporativa a nuevos estándares de elegancia y eficiencia.</string>
+    <string name="write_query">Escribe tu consulta</string>
+    <string name="mowi_offer">Mowi ofrece desplazamiento empresarial adaptativo, priorizando experiencias únicas con servicios personalizados para traslados eficientes y sin complicaciones en todas modalidades.</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Perfil de Usuario</string>
+    <string name="profile_email">Correo:</string>
+    <string name="profile_role">Rol:</string>
 </resources>

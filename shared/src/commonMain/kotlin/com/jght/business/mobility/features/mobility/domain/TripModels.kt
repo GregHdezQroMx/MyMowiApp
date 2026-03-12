@@ -12,6 +12,15 @@ data class UserProfile(
 )
 
 @Serializable
+data class TripHistoryItem(
+    val id: String,
+    val status: String, // e.g., "Cancelado", "Cobrado"
+    val date: String,
+    val origin: String,
+    val destination: String
+)
+
+@Serializable
 data class TripDestination(
     val id: String,
     val name: String,
@@ -46,4 +55,7 @@ sealed class TripRoute : NavKey {
     @Serializable data object Home : TripRoute()
     @Serializable data class Selection(val destinationId: String) : TripRoute()
     @Serializable data class Active(val destinationName: String, val durationMinutes: Int) : TripRoute()
+    @Serializable data object Profile : TripRoute()
+    @Serializable data object History : TripRoute()
+    @Serializable data object About : TripRoute()
 }

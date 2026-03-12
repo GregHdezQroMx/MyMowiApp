@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -48,11 +49,15 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import com.jght.business.mobility.features.mobility.data.repository.TripRepository
 import com.jght.business.mobility.features.mobility.domain.TripRoute
+import com.jght.business.mobility.features.mobility.domain.UserProfile
+import com.jght.business.mobility.features.mobility.presentation.viewmodel.TripUiState
+import com.jght.business.mobility.features.mobility.presentation.viewmodel.TripViewModel
 import com.jght.business.mobility.features.mobility.presentation.ui.ActiveTripScreen
 import com.jght.business.mobility.features.mobility.presentation.ui.HomeScreen
 import com.jght.business.mobility.features.mobility.presentation.ui.TripBookingScreen
-import com.jght.business.mobility.features.mobility.presentation.viewmodel.TripUiState
-import com.jght.business.mobility.features.mobility.presentation.viewmodel.TripViewModel
+import com.jght.business.mobility.features.mobility.presentation.ui.TripHistoryScreen
+import com.jght.business.mobility.features.mobility.presentation.ui.AboutScreen
+import com.jght.business.mobility.features.mobility.presentation.ui.ProfileScreen
 import kotlinx.coroutines.launch
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -73,6 +78,9 @@ private val config = SavedStateConfiguration {
             subclass(TripRoute.Home::class)
             subclass(TripRoute.Selection::class)
             subclass(TripRoute.Active::class)
+            subclass(TripRoute.Profile::class)
+            subclass(TripRoute.History::class)
+            subclass(TripRoute.About::class)
         }
     }
 }
@@ -87,7 +95,11 @@ fun App() {
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val scope = rememberCoroutineScope()
 
-        val userName = if (uiState is TripUiState.Success) (uiState as TripUiState.Success).userProfile.name else "User"
+        val currentUser = if (uiState is TripUiState.Success) {
+            (uiState as TripUiState.Success).userProfile
+        } else {
+            UserProfile("0", "User", "")
+        }
 
         ModalNavigationDrawer(
             drawerState = drawerState,
@@ -98,10 +110,21 @@ fun App() {
                     drawerShape = RoundedCornerShape(0.dp)
                 ) {
                     DrawerContent(
-                        userName = userName
-                    ) {
-                        scope.launch { drawerState.close() }
-                    }
+                        userName = currentUser.name,
+                        onProfileClick = {
+                            scope.launch { drawerState.close() }
+                            backStack.add(TripRoute.Profile)
+                        },
+                        onHistoryClick = {
+                            scope.launch { drawerState.close() }
+                            backStack.add(TripRoute.History)
+                        },
+                        onAboutClick = {
+                            scope.launch { drawerState.close() }
+                            backStack.add(TripRoute.About)
+                        },
+                        onClose = { scope.launch { drawerState.close() } }
+                    )
                 }
             }
         ) {
@@ -122,7 +145,7 @@ fun App() {
                             TripBookingScreen(
                                 viewModel = viewModel,
                                 onNavigateBack = { backStack.removeLastOrNull() },
-                                onStartTrip = { name, duration ->
+                                onStartTrip = { name: String, duration: Int ->
                                     viewModel.startTrip(duration)
                                     backStack.add(TripRoute.Active(name, duration))
                                 }
@@ -139,6 +162,22 @@ fun App() {
                                 }
                             )
                         }
+                        is TripRoute.Profile -> NavEntry(key) {
+                            ProfileScreen(
+                                userProfile = currentUser,
+                                onNavigateBack = { backStack.removeLastOrNull() }
+                            )
+                        }
+                        is TripRoute.History -> NavEntry(key) {
+                            TripHistoryScreen(
+                                onNavigateBack = { backStack.removeLastOrNull() }
+                            )
+                        }
+                        is TripRoute.About -> NavEntry(key) {
+                            AboutScreen(
+                                onNavigateBack = { backStack.removeLastOrNull() }
+                            )
+                        }
                     }
                 }
             )
@@ -147,7 +186,13 @@ fun App() {
 }
 
 @Composable
-fun DrawerContent(userName: String, onClose: () -> Unit) {
+fun DrawerContent(
+    userName: String,
+    onProfileClick: () -> Unit,
+    onHistoryClick: () -> Unit,
+    onAboutClick: () -> Unit,
+    onClose: () -> Unit
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
@@ -173,7 +218,7 @@ fun DrawerContent(userName: String, onClose: () -> Unit) {
                         stringResource(Res.string.view_profile),
                         color = Color(0xFF7E57C2),
                         fontSize = 14.sp,
-                        modifier = Modifier.clickable { onClose() }
+                        modifier = Modifier.clickable { onProfileClick() }
                     )
                 }
             }
@@ -183,13 +228,13 @@ fun DrawerContent(userName: String, onClose: () -> Unit) {
         HorizontalDivider(color = Color(0xFFF5F5F5))
 
         DrawerItem(Icons.AutoMirrored.Filled.List, stringResource(Res.string.trip_history)) {
-            onClose()
+            onHistoryClick()
         }
         DrawerItem(Icons.Default.DateRange, stringResource(Res.string.trip_agenda)) {
             onClose()
         }
         DrawerItem(Icons.Default.Info, stringResource(Res.string.about_mowi)) {
-            onClose()
+            onAboutClick()
         }
         DrawerItem(Icons.Default.Build, stringResource(Res.string.support)) {
             onClose()
