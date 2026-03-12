@@ -24,10 +24,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -68,6 +68,9 @@ import com.jght.business.mobility.domain.features.mobility.model.VehicleType
 import com.jght.business.mobility.presentation.features.mobility.viewmodel.LatLng
 import com.jght.business.mobility.presentation.features.mobility.viewmodel.TripUiState
 import com.jght.business.mobility.presentation.features.mobility.viewmodel.TripViewModel
+import mymowiapp.composeapp.generated.resources.Res
+import mymowiapp.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MockMapView(
@@ -134,7 +137,10 @@ fun MockMapView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onNavigateToBooking: () -> Unit) {
+fun HomeScreen(
+    onNavigateToBooking: () -> Unit,
+    onOpenDrawer: () -> Unit
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         MockMapView(modifier = Modifier.fillMaxSize(), vehicleLocation = LatLng(19.4326, -99.1332))
         Column(modifier = Modifier.fillMaxSize()) {
@@ -142,7 +148,7 @@ fun HomeScreen(onNavigateToBooking: () -> Unit) {
                 title = {},
                 navigationIcon = {
                     IconButton(
-                        onClick = {},
+                        onClick = onOpenDrawer,
                         modifier = Modifier.padding(8.dp).background(Color.White.copy(alpha = 0.9f), CircleShape)
                     ) {
                         Icon(Icons.Default.Menu, contentDescription = "Menu")
@@ -158,12 +164,33 @@ fun HomeScreen(onNavigateToBooking: () -> Unit) {
                 elevation = CardDefaults.cardElevation(defaultElevation = 12.dp)
             ) {
                 Column(modifier = Modifier.padding(24.dp)) {
-                    Text("Hola José Luis", fontSize = 26.sp, fontWeight = FontWeight.ExtraBold)
-                    Text("Tu logística corporativa, optimizada.", fontSize = 15.sp, color = Color.Gray)
+                    Text(
+                        text = stringResource(Res.string.hello_user, "José Luis"),
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    Text(
+                        text = stringResource(Res.string.what_to_do),
+                        fontSize = 15.sp,
+                        color = Color.Gray
+                    )
                     Spacer(modifier = Modifier.height(24.dp))
-                    ActionItem("Solicitar un viaje", "¿A dónde vamos?", onNavigateToBooking)
-                    ActionItem("Envíos Mowi", "Documentación y paquetería.", {})
-                    ActionItem("Agendar", "Viajes programados.", {})
+
+                    ActionItem(
+                        stringResource(Res.string.request_trip),
+                        stringResource(Res.string.where_to_go),
+                        onNavigateToBooking
+                    )
+                    ActionItem(
+                        stringResource(Res.string.mowi_shipments),
+                        stringResource(Res.string.shipments_desc),
+                        {}
+                    )
+                    ActionItem(
+                        stringResource(Res.string.schedule_trip),
+                        stringResource(Res.string.schedule_desc),
+                        {}
+                    )
                 }
             }
         }
@@ -177,7 +204,7 @@ fun TripBookingScreen(viewModel: TripViewModel, onNavigateBack: () -> Unit, onSt
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Reserva Corporativa", fontWeight = FontWeight.Bold) },
+                title = { Text(stringResource(Res.string.corporate_booking), fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -217,7 +244,7 @@ fun TripBookingContent(
         modifier = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        item { Text("Seleccione el Servicio", fontSize = 18.sp, fontWeight = FontWeight.Bold) }
+        item { Text(stringResource(Res.string.select_service), fontSize = 18.sp, fontWeight = FontWeight.Bold) }
         item {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
@@ -230,7 +257,7 @@ fun TripBookingContent(
                 }
             }
         }
-        item { Text("Destinos Frecuentes", fontSize = 18.sp, fontWeight = FontWeight.Bold) }
+        item { Text(stringResource(Res.string.frequent_destinations), fontSize = 18.sp, fontWeight = FontWeight.Bold) }
         items(state.destinations) { d ->
             DestinationCard(d, d == state.selectedDestination) { onDestinationSelect(d) }
         }
@@ -244,7 +271,7 @@ fun TripBookingContent(
                 shape = RoundedCornerShape(16.dp),
                 enabled = state.selectedDestination != null && state.selectedVehicle != null
             ) {
-                Text("Confirmar Viaje Mowi", color = Color.White, fontWeight = FontWeight.Bold)
+                Text(stringResource(Res.string.confirm_trip), color = Color.White, fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -271,7 +298,7 @@ fun ActiveTripScreen(viewModel: TripViewModel, destinationName: String, onTripFi
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = if (isArriving) "Conductor en camino..." else if (progress >= 1f) "¡Destino alcanzado!" else "Viaje a $destinationName",
+                    text = if (isArriving) stringResource(Res.string.driver_on_the_way) else if (progress >= 1f) stringResource(Res.string.destination_reached) else stringResource(Res.string.trip_to, destinationName),
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 20.sp
                 )
@@ -289,16 +316,15 @@ fun ActiveTripScreen(viewModel: TripViewModel, destinationName: String, onTripFi
 
                 Text(
                     text = when {
-                        isArriving -> "Tu conductor asignado llegará en 3 min"
-                        progress < 1f -> "Tiempo estimado de llegada: ${( (1f - progress) * 10).toInt()} min"
-                        else -> "Resumen de tu viaje corporativo"
+                        isArriving -> stringResource(Res.string.driver_arrival_desc)
+                        progress < 1f -> stringResource(Res.string.eta_desc, ( (1f - progress) * 10).toInt())
+                        else -> stringResource(Res.string.trip_summary_title)
                     },
                     fontSize = 14.sp,
                     color = if (progress >= 1f) Color(0xFF2E7D32) else Color.Gray,
                     fontWeight = if (progress >= 1f) FontWeight.Bold else FontWeight.Normal
                 )
 
-                // Resumen final visible al terminar el viaje
                 AnimatedVisibility(visible = progress >= 1f) {
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
@@ -315,7 +341,7 @@ fun ActiveTripScreen(viewModel: TripViewModel, destinationName: String, onTripFi
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text("Finalizar y Aceptar", color = Color.White)
+                            Text(stringResource(Res.string.finish_and_accept), color = Color.White)
                         }
                     }
                 }
@@ -378,9 +404,9 @@ fun DestinationCard(d: TripDestination, isSel: Boolean, onClick: () -> Unit) {
 fun OptimizationCard(opt: TripOptimizationInfo) {
     Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color(0xFFF1F8E9)), shape = RoundedCornerShape(16.dp)) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("Optimización MOWI IA", fontWeight = FontWeight.ExtraBold, color = Color(0xFF2E7D32), fontSize = 14.sp)
+            Text(stringResource(Res.string.ai_optimization_title), fontWeight = FontWeight.ExtraBold, color = Color(0xFF2E7D32), fontSize = 14.sp)
             Text(opt.message, fontSize = 13.sp, color = Color.DarkGray)
-            Text("Ahorro Proyectado: ${opt.savingsPercentage}%", fontWeight = FontWeight.Bold, color = Color(0xFF1B5E20))
+            Text(stringResource(Res.string.projected_savings, opt.savingsPercentage), fontWeight = FontWeight.Bold, color = Color(0xFF1B5E20))
         }
     }
 }
@@ -390,19 +416,19 @@ fun OptimizationCard(opt: TripOptimizationInfo) {
 fun CostSummaryCard(summary: TripCostSummary) {
     Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFFFAFAFA))) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("Detalle de Logística", fontWeight = FontWeight.Bold, color = Color.Black)
+            Text(stringResource(Res.string.logistics_detail), fontWeight = FontWeight.Bold, color = Color.Black)
             Spacer(modifier = Modifier.height(12.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("Tarifa Base", color = Color.Gray, fontSize = 14.sp)
+                Text(stringResource(Res.string.base_fare), color = Color.Gray, fontSize = 14.sp)
                 Text("${summary.currency} ${summary.subtotal}", color = Color.Black, fontWeight = FontWeight.Medium)
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("Seguro Corporativo", color = Color.Gray, fontSize = 14.sp)
+                Text(stringResource(Res.string.corporate_insurance), color = Color.Gray, fontSize = 14.sp)
                 Text("${summary.currency} ${summary.tax}", color = Color.Black, fontWeight = FontWeight.Medium)
             }
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFEEEEEE))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("Total Final", fontWeight = FontWeight.ExtraBold, color = Color.Black, fontSize = 18.sp)
+                Text(stringResource(Res.string.total_final), fontWeight = FontWeight.ExtraBold, color = Color.Black, fontSize = 18.sp)
                 Text("${summary.currency} ${summary.total}", fontWeight = FontWeight.ExtraBold, color = Color(0xFF3F51B5), fontSize = 18.sp)
             }
         }

@@ -18,7 +18,8 @@ sealed class TripUiState {
         val costSummary: TripCostSummary? = null,
         val optimization: TripOptimizationInfo? = null,
         val selectedDestination: TripDestination? = null,
-        val selectedVehicle: VehicleType? = null
+        val selectedVehicle: VehicleType? = null,
+        val userProfile: UserProfile = UserProfile("1", "José Luis", "j.luis@mowi.com")
     ) : TripUiState()
     data class Error(val message: String) : TripUiState()
 }
@@ -39,16 +40,6 @@ class TripViewModel(private val repository: TripRepository) : ViewModel() {
     private val _isDriverArriving = MutableStateFlow(false)
     val isDriverArriving: StateFlow<Boolean> = _isDriverArriving.asStateFlow()
 
-    private var simulationJob: Job? = null
-
-    val vehicleTypes = listOf(
-        VehicleType("corp", "Corporativo", "taxi", 10.0),
-        VehicleType("van", "Vans", "van", 15.0),
-        VehicleType("hour", "Viajes por Hora", "clock", 20.0),
-        VehicleType("exec", "Ejecutivo", "car", 25.0),
-        VehicleType("green", "Green", "leaf", 12.0)
-    )
-
     init {
         loadInitialData()
     }
@@ -60,10 +51,14 @@ class TripViewModel(private val repository: TripRepository) : ViewModel() {
                 val destinations = repository.getDestinations()
                 _uiState.value = TripUiState.Success(
                     destinations = destinations,
-                    vehicleTypes = vehicleTypes
+                    vehicleTypes = listOf(
+                        VehicleType("corp", "Corporativo", "taxi", 10.0),
+                        VehicleType("van", "Vans", "van", 15.0),
+                        VehicleType("exec", "Ejecutivo", "car", 25.0)
+                    )
                 )
             } catch (e: Exception) {
-                _uiState.value = TripUiState.Error("Error al cargar datos: ${e.message}")
+                _uiState.value = TripUiState.Error("Error: ${e.message}")
             }
         }
     }
@@ -72,19 +67,15 @@ class TripViewModel(private val repository: TripRepository) : ViewModel() {
         val currentState = _uiState.value
         if (currentState is TripUiState.Success) {
             viewModelScope.launch {
-                _uiState.value = TripUiState.Loading 
                 try {
                     val costs = repository.calculateCosts(destination.id)
                     val optimization = repository.getAiOptimization(destination.id)
-                    
                     _uiState.value = currentState.copy(
                         selectedDestination = destination,
                         costSummary = costs,
                         optimization = optimization
                     )
-                } catch (e: Exception) {
-                    _uiState.value = TripUiState.Error("Error en la selección: ${e.message}")
-                }
+                } catch (e: Exception) { /* Handle error */ }
             }
         }
     }
@@ -100,39 +91,25 @@ class TripViewModel(private val repository: TripRepository) : ViewModel() {
         simulationJob?.cancel()
         _tripProgress.value = 0f
         _isDriverArriving.value = true
-        
         simulationJob = viewModelScope.launch {
-            // Simulación de llegada (3s)
             delay(3000)
             _isDriverArriving.value = false
-            
             val totalSeconds = durationMinutes
-            val startLat = 19.4326
-            val startLng = -99.1332
-            val endLat = 19.4426
-            val endLng = -99.1432
-            
             for (i in 1..totalSeconds) {
                 delay(1000)
                 val progress = i.toFloat() / totalSeconds
                 _tripProgress.value = progress
-                
-                // Simulación de movimiento por "calles" (primero lat, luego lng)
+                // Simulación Manhattan Path
                 if (progress < 0.5f) {
-                    _vehicleLocation.value = LatLng(
-                        lat = startLat + (endLat - startLat) * (progress * 2),
-                        lng = startLng
-                    )
+                    _vehicleLocation.value = LatLng(19.4326 + (0.01 * progress * 2), -99.1332)
                 } else {
-                    _vehicleLocation.value = LatLng(
-                        lat = endLat,
-                        lng = startLng + (endLng - startLng) * ((progress - 0.5f) * 2)
-                    )
+                    _vehicleLocation.value = LatLng(19.4426, -99.1332 + (-0.01 * (progress - 0.5) * 2))
                 }
             }
-            // No llamamos a onFinished automáticamente para dejar la pantalla abierta
         }
     }
+
+    private var simulationJob: Job? = null
 
     fun resetTrip() {
         simulationJob?.cancel()

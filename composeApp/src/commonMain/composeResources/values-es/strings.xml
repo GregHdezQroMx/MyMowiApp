@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Mowi</string>
+    <string name="hello_user">Hola %1$s</string>
+    <string name="what_to_do">¿Qué te gustaría hacer hoy?</string>
+    <string name="request_trip">Solicitar un viaje</string>
+    <string name="where_to_go">¿A dónde vamos?</string>
+    <string name="mowi_shipments">Envíos Mowi</string>
+    <string name="shipments_desc">Documentación y paquetería.</string>
+    <string name="schedule_trip">Agendar</string>
+    <string name="schedule_desc">Viajes programados.</string>
+    <string name="corporate_booking">Reserva Corporativa</string>
+    <string name="select_service">Seleccione el Servicio</string>
+    <string name="frequent_destinations">Destinos Frecuentes</string>
+    <string name="confirm_trip">Confirmar Viaje Mowi</string>
+    <string name="driver_on_the_way">Conductor en camino...</string>
+    <string name="trip_to">Viaje a %1$s</string>
+    <string name="destination_reached">¡Destino alcanzado!</string>
+    <string name="driver_arrival_desc">Tu conductor asignado llegará en 3 min</string>
+    <string name="eta_desc">Tiempo estimado de llegada: %1$d min</string>
+    <string name="trip_summary_title">Resumen de tu viaje corporativo</string>
+    <string name="finish_and_accept">Finalizar y Aceptar</string>
+    <string name="logistics_detail">Detalle de Logística</string>
+    <string name="base_fare">Tarifa Base</string>
+    <string name="corporate_insurance">Seguro Corporativo</string>
+    <string name="total_final">Total Final</string>
+    <string name="ai_optimization_title">Optimización MOWI IA</string>
+    <string name="projected_savings">Ahorro Proyectado: %1$d%</string>
+
+    <!-- Drawer Menu -->
+    <string name="view_profile">Ver mi perfil</string>
+    <string name="trip_history">Historial de viajes</string>
+    <string name="trip_agenda">Agenda de viajes</string>
+    <string name="about_mowi">Sobre Mowi</string>
+    <string name="support">Soporte</string>
+    <string name="contact_us">ENTRE EN CONTACTO</string>
+</resources>

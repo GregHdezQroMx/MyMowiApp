@@ -4,6 +4,14 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class UserProfile(
+    val id: String,
+    val name: String,
+    val email: String,
+    val role: String = "Corporate"
+)
+
+@Serializable
 data class TripDestination(
     val id: String,
     val name: String,

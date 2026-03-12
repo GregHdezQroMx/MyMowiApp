@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Mowi</string>
+    <string name="hello_user">Hello %1$s</string>
+    <string name="what_to_do">What would you like to do today?</string>
+    <string name="request_trip">Request a trip</string>
+    <string name="where_to_go">Where are we going?</string>
+    <string name="mowi_shipments">Mowi Shipments</string>
+    <string name="shipments_desc">Documentation and parcels.</string>
+    <string name="schedule_trip">Schedule</string>
+    <string name="schedule_desc">Scheduled trips.</string>
+    <string name="corporate_booking">Corporate Booking</string>
+    <string name="select_service">Select Service</string>
+    <string name="frequent_destinations">Frequent Destinations</string>
+    <string name="confirm_trip">Confirm Mowi Trip</string>
+    <string name="driver_on_the_way">Driver on the way...</string>
+    <string name="trip_to">Trip to %1$s</string>
+    <string name="destination_reached">Destination reached!</string>
+    <string name="driver_arrival_desc">Your assigned driver will arrive in 3 min</string>
+    <string name="eta_desc">Estimated time of arrival: %1$d min</string>
+    <string name="trip_summary_title">Summary of your corporate trip</string>
+    <string name="finish_and_accept">Finish and Accept</string>
+    <string name="logistics_detail">Logistics Detail</string>
+    <string name="base_fare">Base Fare</string>
+    <string name="corporate_insurance">Corporate Insurance</string>
+    <string name="total_final">Final Total</string>
+    <string name="ai_optimization_title">MOWI AI Optimization</string>
+    <string name="projected_savings">Projected Savings: %1$d%%</string>
+
+    <!-- Drawer Menu -->
+    <string name="view_profile">View my profile</string>
+    <string name="trip_history">Trip history</string>
+    <string name="trip_agenda">Trip agenda</string>
+    <string name="about_mowi">About Mowi</string>
+    <string name="support">Support</string>
+    <string name="contact_us">GET IN TOUCH</string>
+</resources>
