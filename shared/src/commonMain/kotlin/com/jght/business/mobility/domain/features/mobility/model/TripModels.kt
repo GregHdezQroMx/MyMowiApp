@@ -1,5 +1,6 @@
 package com.jght.business.mobility.domain.features.mobility.model
 
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -23,3 +24,18 @@ data class TripOptimizationInfo(
     val savingsPercentage: Int,
     val estimatedTimeMinutes: Int
 )
+
+@Serializable
+data class VehicleType(
+    val id: String,
+    val name: String,
+    val iconName: String,
+    val basePrice: Double
+)
+
+@Serializable
+sealed class TripRoute : NavKey {
+    @Serializable data object Home : TripRoute()
+    @Serializable data class Selection(val destinationId: String) : TripRoute()
+    @Serializable data class Active(val destinationName: String, val durationMinutes: Int) : TripRoute()
+}

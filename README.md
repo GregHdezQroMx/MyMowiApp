@@ -26,6 +26,7 @@ The project follows a **Modular Clean Architecture with MVVM** pattern:
 ## 🛠️ Tech Stack
 - **Compose Multiplatform:** 100% native shared UI.
 - **Koin:** Multiplatform dependency injection.
+- **Navigation 3:** Next-generation type-safe navigation for Compose Multiplatform.
 - **Kotlinx Coroutines & Flow:** Reactive state management and concurrency.
 - **Kotlinx Serialization:** Type-safe data handling.
 - **Ktor:** Network communication for both client and server.
@@ -43,11 +44,17 @@ Open the `iosApp` directory in Xcode or use the run configuration in Android Stu
 ./gradlew :server:run
 ```
 
-## 📈 Migration from React Native
+## 📉 Migration from React Native
 This project demonstrates why KMP/CMP is the superior choice for corporate logistics:
 1. **Strong Typing:** Eliminates runtime errors common in JS/TS environments.
 2. **Native Performance:** 60/120 FPS UI execution without the overhead of a Bridge or JSI.
 3. **Maintainability:** A single source of truth for business logic and UI, compiled directly to native binaries.
+
+## 🗺️ Roadmap
+- [x] **Phase 1**: Initial MVP Architecture & Core UI Components.
+- [x] **Phase 2**: Navigation 3 Integration (JetPack/JetBrains Alpha).
+- [ ] **Phase 3**: Real-time Ktor Server synchronization & Web Support.
+- [ ] **Phase 4**: Advanced AI Route Optimization & Analytics Dashboard.
 
 ---
 Developed by **GregHdezQroMx** based on the architecture proven in [KommHotel](https://github.com/GregHdezQroMx/KommHotel).
