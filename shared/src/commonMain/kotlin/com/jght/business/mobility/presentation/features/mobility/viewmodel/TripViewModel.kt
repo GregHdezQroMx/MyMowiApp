@@ -23,6 +23,8 @@ sealed class TripUiState {
     data class Error(val message: String) : TripUiState()
 }
 
+data class LatLng(val lat: Double, val lng: Double)
+
 class TripViewModel(private val repository: TripRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow<TripUiState>(TripUiState.Idle)
@@ -30,6 +32,12 @@ class TripViewModel(private val repository: TripRepository) : ViewModel() {
 
     private val _tripProgress = MutableStateFlow(0f)
     val tripProgress: StateFlow<Float> = _tripProgress.asStateFlow()
+
+    private val _vehicleLocation = MutableStateFlow(LatLng(19.4326, -99.1332))
+    val vehicleLocation: StateFlow<LatLng> = _vehicleLocation.asStateFlow()
+
+    private val _isDriverArriving = MutableStateFlow(false)
+    val isDriverArriving: StateFlow<Boolean> = _isDriverArriving.asStateFlow()
 
     private var simulationJob: Job? = null
 
@@ -88,21 +96,47 @@ class TripViewModel(private val repository: TripRepository) : ViewModel() {
         }
     }
 
-    fun startTrip(durationMinutes: Int, onFinished: () -> Unit) {
+    fun startTrip(durationMinutes: Int) {
         simulationJob?.cancel()
         _tripProgress.value = 0f
+        _isDriverArriving.value = true
+        
         simulationJob = viewModelScope.launch {
-            val totalSeconds = durationMinutes // 1 min = 1 sec
+            // Simulación de llegada (3s)
+            delay(3000)
+            _isDriverArriving.value = false
+            
+            val totalSeconds = durationMinutes
+            val startLat = 19.4326
+            val startLng = -99.1332
+            val endLat = 19.4426
+            val endLng = -99.1432
+            
             for (i in 1..totalSeconds) {
                 delay(1000)
-                _tripProgress.value = i.toFloat() / totalSeconds
+                val progress = i.toFloat() / totalSeconds
+                _tripProgress.value = progress
+                
+                // Simulación de movimiento por "calles" (primero lat, luego lng)
+                if (progress < 0.5f) {
+                    _vehicleLocation.value = LatLng(
+                        lat = startLat + (endLat - startLat) * (progress * 2),
+                        lng = startLng
+                    )
+                } else {
+                    _vehicleLocation.value = LatLng(
+                        lat = endLat,
+                        lng = startLng + (endLng - startLng) * ((progress - 0.5f) * 2)
+                    )
+                }
             }
-            onFinished()
+            // No llamamos a onFinished automáticamente para dejar la pantalla abierta
         }
     }
 
     fun resetTrip() {
         simulationJob?.cancel()
         _tripProgress.value = 0f
+        _isDriverArriving.value = false
     }
 }
