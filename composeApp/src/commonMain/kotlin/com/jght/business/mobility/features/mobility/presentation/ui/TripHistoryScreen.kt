@@ -1,13 +1,33 @@
 package com.jght.business.mobility.features.mobility.presentation.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,7 +37,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jght.business.mobility.features.mobility.domain.TripHistoryItem
 import mymowiapp.composeapp.generated.resources.Res
-import mymowiapp.composeapp.generated.resources.*
+import mymowiapp.composeapp.generated.resources.destination_label
+import mymowiapp.composeapp.generated.resources.origin_label
+import mymowiapp.composeapp.generated.resources.see_more
+import mymowiapp.composeapp.generated.resources.trip_history
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,7 +68,7 @@ fun TripHistoryScreen(
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
-                actions = { Spacer(modifier = Modifier.width(48.dp)) } // Para centrar el titulo
+                actions = { Spacer(modifier = Modifier.width(48.dp)) }
             )
         }
     ) { padding ->
@@ -66,7 +89,7 @@ fun HistoryCard(item: TripHistoryItem) {
     val isCancelled = item.status.lowercase().contains("cancel")
     val statusColor = if (isCancelled) Color(0xFFFFEBEE) else Color(0xFFE8F5E9)
     val statusTextColor = if (isCancelled) Color(0xFFD32F2F) else Color(0xFF2E7D32)
-    val statusIcon = if (isCancelled) "✕" else "✓"
+    val statusIcon = if (isCancelled) Icons.Default.Close else Icons.Default.CheckCircle
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -88,7 +111,7 @@ fun HistoryCard(item: TripHistoryItem) {
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(statusIcon, color = statusTextColor, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        Icon(statusIcon, contentDescription = null, tint = statusTextColor, modifier = Modifier.size(14.dp))
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(item.status, color = statusTextColor, fontSize = 12.sp, fontWeight = FontWeight.Medium)
                     }

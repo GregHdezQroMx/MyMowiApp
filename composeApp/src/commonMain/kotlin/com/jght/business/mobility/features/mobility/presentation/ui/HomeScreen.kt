@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocalTaxi
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -124,7 +125,12 @@ fun ActionItem(title: String, subtitle: String, onClick: () -> Unit) {
                 .background(Color(0xFFF8F8F8), RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "🚖", fontSize = 26.sp)
+            Icon(
+                imageVector = Icons.Default.LocalTaxi,
+                contentDescription = null,
+                modifier = Modifier.size(28.dp),
+                tint = Color(0xFF3F51B5)
+            )
         }
         Spacer(modifier = Modifier.width(16.dp))
         Column {
